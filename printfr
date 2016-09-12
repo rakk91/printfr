@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# creazione delle variabili
+BIANCO_NERO="-o blackplot"
+ORDINE_INVERSO="-o outputorder=reverse"
+PAGINE_PARI="-o page-set=even"
+PAGINE_DISPARI="-o page-set=odd"
+OTPION=
+
+autoPrint() {
+    echo
+	echo -n "Stampare il file $1? [y/n] "
+    read choose
+    if [[ $choose = 'y' || $choose = 'Y' || $choose = '' ]]; then
+        echo -e "Stampa delle pagine pari in ordine inverso."
+        echo
+        lp $OPTION $ORDINE_INVERSO $PAGINE_PARI "$1"
+        echo
+        echo -e    "Reinserire le pagine nel corretto ordine."
+        echo -e -n "Continuare la stampa? [y/n]? "
+        read choose
+        if [[ $choose = 'y' || $choose = 'Y' || $choose = '' ]]; then
+            echo -e "Stampa delle pagine dispari in ordine normale."
+            echo
+            lp $OPTION $PAGINE_DISPARI "$1"
+            echo
+        fi
+    fi
+
+}
+
+
+case "$1" in
+	-h)
+		echo "Script di stampa automatica:"
+		echo "digitare: $0 [-bw] filename"
+	;;
+	-bw)
+        echo "Attivata opzione bianco e nero"
+        OPTION+=$BIANCO_NERO
+        autoPrint "$2"
+	;;
+	*)
+        autoPrint "$1"
+	;;
+esac
